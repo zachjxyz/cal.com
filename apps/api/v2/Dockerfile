@@ -14,6 +14,11 @@ ARG DATABASE_DIRECT_URL
 ENV NODE_ENV=production
 ENV NODE_OPTIONS=--max-old-space-size=8192
 
+# 🔐 Add VAPID environment variables (these fix your crash)
+ENV VAPID_EMAIL=hello@doublemstudios.com
+ENV VAPID_PUBLIC_KEY=BJSY2YMZICb-o7gCdSVzbRmCJ0A_NwTdJk0F9ETqNH9kV9lF-6wA1MK764P4b7OZ_ZmpIgMJ5f1vyMGBv4z2hjo
+ENV VAPID_PRIVATE_KEY=rCSTHVpUgEpm5lg57sWfw4AGz97dFZ8zEvK5HVplmzw
+
 # Copy entire repo
 COPY . .
 
