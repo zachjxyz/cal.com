@@ -1,29 +1,33 @@
 FROM node:20-alpine AS build
 
-ARG DATABASE_DIRECT_URL
-ARG DATABASE_URL
+# Install required packages
+RUN apk add --no-cache bash yarn openssl
 
+# Set working directory to root of the monorepo
 WORKDIR /calcom
 
-RUN set -eux;
-RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
+# Build-time environment variables
+ARG DATABASE_URL
+ARG DATABASE_DIRECT_URL
 
-ENV NODE_ENV="production"
-ENV NODE_OPTIONS="--max-old-space-size=8192"
-ENV DATABASE_DIRECT_URL=${DATABASE_DIRECT_URL}
-ENV DATABASE_URL=${DATABASE_URL}
+# Set runtime environment variables
+ENV NODE_ENV=production
+ENV NODE_OPTIONS=--max-old-space-size=8192
 
+# Copy entire repo
 COPY . .
 
+# Install all dependencies from root (for Yarn Workspaces to work)
 RUN yarn install
 
-# Build prisma schema and make sure that it is linked to v2 node_modules
+# Generate Prisma client for API
 RUN yarn workspace @calcom/api-v2 run generate-schemas
-RUN rm -rf apps/api/v2/node_modules
-RUN yarn install
 
+# Build the API
 RUN yarn workspace @calcom/api-v2 run build
 
-EXPOSE 80
+# Expose correct port for API
+EXPOSE 3000
 
-CMD [ "yarn", "workspace", "@calcom/api-v2", "start:prod"]
+# Start the API in production mode
+CMD ["yarn", "workspace", "@calcom/api-v2", "start:prod"]
