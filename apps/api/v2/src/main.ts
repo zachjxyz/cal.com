@@ -23,6 +23,13 @@ import { loggerConfig } from "./lib/logger";
 const HttpMethods: (keyof PathItemObject)[] = ["get", "post", "put", "delete", "patch", "options", "head"];
 
 const run = async () => {
+
+  // VAPID KEYS TESTING
+  console.log("✅ Checking VAPID env vars...");
+  console.log("VAPID_PUBLIC_KEY:", process.env.VAPID_PUBLIC_KEY);
+  console.log("VAPID_PRIVATE_KEY:", process.env.VAPID_PRIVATE_KEY);
+  console.log("VAPID_EMAIL:", process.env.VAPID_EMAIL);
+  
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: WinstonModule.createLogger(loggerConfig()),
     bodyParser: false,
