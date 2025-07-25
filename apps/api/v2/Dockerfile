@@ -9,18 +9,10 @@ WORKDIR /calcom
 # Build-time environment variables
 ARG DATABASE_URL
 ARG DATABASE_DIRECT_URL
-ARG VAPID_EMAIL
-ARG VAPID_PUBLIC_KEY
-ARG VAPID_PRIVATE_KEY
 
 # Set runtime environment variables
 ENV NODE_ENV=production
 ENV NODE_OPTIONS=--max-old-space-size=8192
-
-# 🔐 Add VAPID environment variables (these fix your crash)
-ENV VAPID_EMAIL=${VAPID_EMAIL}
-ENV VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY}
-ENV VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY}
 
 # Copy entire repo
 COPY . .
